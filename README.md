@@ -1,16 +1,11 @@
-# Phil
+# SwerveSysId
 
-A template repo for a command style robot. 
+## Goals
+- Use hardcoded constants to collect data as starting point
+- Read config json from sysid as a more general solution
 
-## To Use
-
-- Click `Use this template` in GitHub and create your new repository using the `Phil` template. 
-- Ensure that the `GradleRIO`, `StuyLib`, and `venderdeps` versions are up-to-date in your new repository.
-- Now go Phil up your repository. Godspeed. 
-
-## To Update | Maintain
-
-- Import project to the latest version of WPILib using the built-in import tool. 
-- Check that the `GradleRIO` version is up to date. 
-- Check the latest version of [StuyLib here](https://github.com/StuyPulse/StuyLib/releases) and update the version in `./build.gradle`.
-- Update the files in `./venderdeps` with their latest version, checking their respective websites. 
+## Links
+- [SysId Data Collection SmartDasboard Interface](https://github.com/wpilibsuite/sysid/blob/main/docs/data-collection.md)
+- Robot code for general mechanism in SysId [MechanismRobot.h](https://github.com/wpilibsuite/sysid/blob/main/sysid-projects/mechanism/src/main/include/MechanismRobot.h) [MechanismRobot.cpp](https://github.com/wpilibsuite/sysid/blob/main/sysid-projects/mechanism/src/main/cpp/MechanismRobot.cpp)
+- Base logging class in SysId [SysIdLogger.h](https://github.com/wpilibsuite/sysid/blob/main/sysid-library/src/main/include/sysid/logging/SysIdLogger.h) [SysIdLogger.cpp](https://github.com/wpilibsuite/sysid/blob/main/sysid-library/src/main/cpp/logging/SysIdLogger.cpp)
+- Mechanism logging class in SysId [SysIdGeneralMechanismLogger.h](https://github.com/wpilibsuite/sysid/blob/main/sysid-library/src/main/include/sysid/logging/SysIdGeneralMechanismLogger.h) [SysIdGeneralMechanismLogger.cpp](https://github.com/wpilibsuite/sysid/blob/main/sysid-library/src/main/cpp/logging/SysIdGeneralMechanismLogger.cpp)
