@@ -29,7 +29,7 @@ public class Logger extends SubsystemBase {
 	public void publish(Command test, boolean forwards) {
 		String str = (test instanceof Quasistatic) ? "slow" : "fast";
 
-		str += forwards ? "-forwards" : "-backwards";
+		str += forwards ? "-forward" : "-backward";
 
 		SmartDashboard.putNumberArray(str, values.toArray(new Double[values.size()]));
 	}
