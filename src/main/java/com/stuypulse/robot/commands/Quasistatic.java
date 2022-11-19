@@ -42,7 +42,7 @@ public class Quasistatic extends CommandBase {
 		robot.swerve.setLeftVoltage(0.0);
 		robot.swerve.setRightVoltage(0.0);
 
-		robot.logger.publish();
+		robot.logger.publish(this, voltDelta > 0);
 	}
 	
 }
