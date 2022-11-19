@@ -5,10 +5,11 @@
 
 package com.stuypulse.robot;
 
-import com.stuypulse.robot.commands.auton.DoNothingAuton;
-import com.stuypulse.robot.constants.Ports;
-import com.stuypulse.stuylib.input.Gamepad;
-import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
+import com.stuypulse.robot.commands.Dynamic;
+import com.stuypulse.robot.commands.Quasistatic;
+import com.stuypulse.robot.subsystems.Logger;
+import com.stuypulse.robot.subsystems.VoltageSwerve;
+import com.stuypulse.stuylib.network.SmartNumber;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,14 +17,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class RobotContainer {
 
-    // Gamepads
-    public final Gamepad driver = new AutoGamepad(Ports.Gamepad.DRIVER);
-    public final Gamepad operator = new AutoGamepad(Ports.Gamepad.OPERATOR);
-    
     // Subsystem
+    public VoltageSwerve swerve = new VoltageSwerve();
+    public Logger logger = new Logger(swerve);
 
     // Autons
     private static SendableChooser<Command> autonChooser = new SendableChooser<>();
+
+    private static SmartNumber rampRate = new SmartNumber("Quasistatic Ramp Rate (V/s)", 0.25);
+    private static SmartNumber dynamic = new SmartNumber("Dynamic Step Voltage (V)", 7);
 
     // Robot container
 
@@ -50,7 +52,10 @@ public class RobotContainer {
     /**************/
 
     public void configureAutons() {
-        autonChooser.setDefaultOption("Do Nothing", new DoNothingAuton());
+        autonChooser.setDefaultOption("Quasistatic Forward", new Quasistatic(this, +rampRate.doubleValue()));
+        autonChooser.addOption("Quasistatic Backward", new Quasistatic(this, -rampRate.doubleValue()));
+        autonChooser.addOption("Dynamic Forward", new Dynamic(this, +dynamic.doubleValue()));
+        autonChooser.addOption("Dynamic Backward", new Dynamic(this, -dynamic.doubleValue()));
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }
