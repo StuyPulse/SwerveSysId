@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Logger extends SubsystemBase {
 
+	// 200 samples/s * 20 seconds * 9 doubles per sample
 	private static final int LEN_VALUES = 36000;
 
 	private final List<Double> values;
@@ -27,7 +28,7 @@ public class Logger extends SubsystemBase {
 		String path = test + (forwards ? "-forward" : "-backward");
 		String data = "";
 
-		for (int i = 0; i < values.size() / 9; i+=9) {
+		for (int i = 0; i < values.size(); i += 9) {
 			if (i != 0)
 				data += ",";
 
