@@ -127,10 +127,10 @@ public class VoltageSwerve extends SubsystemBase {
 
 		SmartDashboard.putNumber("Swerve/Left Voltage", leftVoltage);
 		SmartDashboard.putNumber("Swerve/Right Voltage", leftVoltage);
-		SmartDashboard.putNumber("Swerve/Left Pos", getLeftPosition());
-		SmartDashboard.putNumber("Swerve/Left Vel", getLeftVelocity());
-		SmartDashboard.putNumber("Swerve/Right Pos", getRightPosition());
-		SmartDashboard.putNumber("Swerve/right Vel", getRightVelocity());
+		SmartDashboard.putNumber("Swerve/Left Pos (rotations)", getLeftPosition());
+		SmartDashboard.putNumber("Swerve/Left Vel (rotations per s)", getLeftVelocity());
+		SmartDashboard.putNumber("Swerve/Right Pos (rotations)", getRightPosition());
+		SmartDashboard.putNumber("Swerve/Right Vel (rotations per s)", getRightVelocity());
 	}
 
 	@Override

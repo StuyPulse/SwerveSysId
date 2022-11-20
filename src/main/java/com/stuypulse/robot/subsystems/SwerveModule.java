@@ -9,8 +9,9 @@ public interface SwerveModule {
 
     public SwerveModuleState getState();
 
-    public double getVelocity();
+    // in rotations and rotations/s
     public double getDistance();
+    public double getVelocity();
     
     public void setVoltage(double voltage);
 }
