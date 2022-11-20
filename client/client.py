@@ -36,7 +36,7 @@ if __name__ == '__main__':
         
         json_str += f'"{test}": [{s}]'
     
-    json_str += f',"sysid":true,"test":"Drivetrain","units":"Meters","unitsPerRotation":{data["wheelCircumference"] * pi}}}'
+    json_str += f',"sysid":true,"test":"Drivetrain","units":"Meters","unitsPerRotation":{data["wheelDiameter"] * pi}}}'
     
     with open(data['outputFile'], 'w') as f:
         json.dump(json.loads(json_str), f, indent=4)
