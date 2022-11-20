@@ -24,7 +24,7 @@ public class RobotContainer {
     // Autons
     private static SendableChooser<Command> autonChooser = new SendableChooser<>();
 
-    private static SmartNumber rampRate = new SmartNumber("Quasistatic Ramp Rate (V/s)", 0.25);
+    private static SmartNumber rampRate = new SmartNumber("Quasistatic Ramp Rate (V per s)", 0.25);
     private static SmartNumber dynamic = new SmartNumber("Dynamic Step Voltage (V)", 7);
 
     // Robot container
