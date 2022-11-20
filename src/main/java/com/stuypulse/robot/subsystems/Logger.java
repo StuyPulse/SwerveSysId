@@ -3,11 +3,8 @@ package com.stuypulse.robot.subsystems;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.stuypulse.robot.commands.Quasistatic;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Logger extends SubsystemBase {
@@ -26,12 +23,27 @@ public class Logger extends SubsystemBase {
 		values.clear();
 	}
 
-	public void publish(Command test, boolean forwards) {
-		String str = (test instanceof Quasistatic) ? "slow" : "fast";
+	public void publish(String test, boolean forwards) {
+		String path = test + (forwards ? "-forward" : "-backward");
+		String data = "";
 
-		str += forwards ? "-forward" : "-backward";
+		for (int i = 0; i < values.size() / 9; i+=9) {
+			if (i != 0)
+				data += ",";
 
-		SmartDashboard.putNumberArray(str, values.toArray(new Double[values.size()]));
+			data += "[";
+
+			for (int j = 0; j < 9; j++) {
+				if (j != 0)
+					data += ",";
+
+				data += values.get(i + j).toString();
+			}
+
+			data += "]";
+		}
+
+		SmartDashboard.putString(path, data);
 	}
 
 	@Override
@@ -44,7 +56,6 @@ public class Logger extends SubsystemBase {
 		values.add(swerve.getLeftVelocity());
 		values.add(swerve.getRightVelocity());
 		values.add(swerve.getRotation2d().getDegrees() / 360.0);
-		// fix this
-		values.add(0.0);
+		values.add(swerve.getAngularVelocity() / Math.PI / 2.0);
 	}
 }
