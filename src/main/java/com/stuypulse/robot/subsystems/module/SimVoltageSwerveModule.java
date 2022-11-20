@@ -9,6 +9,7 @@ import com.stuypulse.stuylib.network.SmartNumber;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.plant.LinearSystemId;
@@ -82,7 +83,12 @@ public class SimVoltageSwerveModule extends SubsystemBase implements SwerveModul
 
     @Override
     public double getVelocity() {
-        return driveSim.getOutput(0);
+        return driveSim.getOutput(0) / Settings.Encoder.Drive.WHEEL_CIRCUMFERENCE;
+    }
+
+    @Override
+    public SwerveModuleState getState() {
+        return new SwerveModuleState(driveSim.getOutput(0), getRotation2d());
     }
 
     private Rotation2d getRotation2d() {
@@ -97,7 +103,10 @@ public class SimVoltageSwerveModule extends SubsystemBase implements SwerveModul
 
     @Override
     public void setVoltage(double voltage) {
-        this.voltage = voltage;
+        if (Math.abs(voltage) < Drive.kS)
+            this.voltage = 0;
+        else
+            this.voltage = voltage - Math.signum(voltage) * Drive.kS;
     }
 
     public void periodic() {

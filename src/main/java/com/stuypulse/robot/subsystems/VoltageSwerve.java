@@ -2,11 +2,22 @@ package com.stuypulse.robot.subsystems;
 
 import static com.stuypulse.robot.constants.Motors.Modules.*;
 
+import java.util.Arrays;
+
 import com.kauailabs.navx.frc.AHRS;
+import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.module.VoltageSwerveModule;
+import com.stuypulse.stuylib.math.Angle;
+import com.stuypulse.stuylib.util.AngleVelocity;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -24,13 +35,36 @@ public class VoltageSwerve extends SubsystemBase {
 				BackRight.ENCODER_PORT, BackRight.ABSOLUTE_OFFSET, BackRight.MODULE_OFFSET)
 	};
 
+	private final SwerveDriveKinematics kinematics;
+	private final SwerveDriveOdometry odometry;
+
 	// Sensors
 	private final AHRS gyro;
+	private final AngleVelocity angleFilter;
+	private double angularVelocity;
 
 	private double leftVoltage, rightVoltage;
 
+	private Field2d field;
+
 	public VoltageSwerve() {
 		gyro = new AHRS(SPI.Port.kMXP);
+
+		kinematics = new SwerveDriveKinematics(getModuleLocations());
+		odometry = new SwerveDriveOdometry(kinematics, getRotation2d());
+
+		angleFilter = new AngleVelocity();
+
+		field = new Field2d();
+		SmartDashboard.putData(field);
+	}
+
+	private Translation2d[] getModuleLocations() {
+		return Arrays.stream(modules).map(x -> x.getLocation()).toArray(Translation2d[]::new);
+	}
+
+	private SwerveModuleState[] getModuleStates() {
+		return Arrays.stream(modules).map(x -> x.getState()).toArray(SwerveModuleState[]::new);
 	}
 
 	public void setLeftVoltage(double voltage) {
@@ -72,13 +106,24 @@ public class VoltageSwerve extends SubsystemBase {
 		return gyro.getRotation2d();
 	}
 
+	public double getAngularVelocity() {
+		if (RobotBase.isReal())
+			return Math.toRadians(gyro.getRate());
+		else
+			return angularVelocity;
+	}
+
 
 	@Override
 	public void periodic() {
+		odometry.update(getRotation2d(), getModuleStates());
+
 		modules[0].setVoltage(rightVoltage);
 		modules[1].setVoltage(leftVoltage);
 		modules[2].setVoltage(leftVoltage);
 		modules[3].setVoltage(rightVoltage);
+
+		field.setRobotPose(odometry.getPoseMeters());
 
 		SmartDashboard.putNumber("Swerve/Left Voltage", leftVoltage);
 		SmartDashboard.putNumber("Swerve/Right Voltage", leftVoltage);
@@ -86,6 +131,15 @@ public class VoltageSwerve extends SubsystemBase {
 		SmartDashboard.putNumber("Swerve/Left Vel", getLeftVelocity());
 		SmartDashboard.putNumber("Swerve/Right Pos", getRightPosition());
 		SmartDashboard.putNumber("Swerve/right Vel", getRightVelocity());
+	}
+
+	@Override
+	public void simulationPeriodic() {
+		var speeds = kinematics.toChassisSpeeds(getModuleStates());
+
+        gyro.setAngleAdjustment(gyro.getAngle() - Math.toDegrees(speeds.omegaRadiansPerSecond * Settings.dT));
+
+		angularVelocity = angleFilter.get(Angle.fromRotation2d(getRotation2d()));
 	}
 
 }

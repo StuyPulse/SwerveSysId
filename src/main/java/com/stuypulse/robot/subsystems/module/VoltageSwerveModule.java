@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.stuypulse.robot.constants.Motors;
+import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Settings.Encoder;
 import com.stuypulse.robot.subsystems.SwerveModule;
 import com.stuypulse.stuylib.control.angle.AngleController;
@@ -88,6 +89,11 @@ public class VoltageSwerveModule extends SubsystemBase implements SwerveModule {
     @Override
     public double getVelocity() {
         return driveEncoder.getVelocity();
+    }
+
+    @Override
+    public SwerveModuleState getState() {
+        return new SwerveModuleState(getVelocity() * Settings.Encoder.Drive.WHEEL_CIRCUMFERENCE, getRotation2d());
     }
 
     private Rotation2d getAbsolutePosition() {
