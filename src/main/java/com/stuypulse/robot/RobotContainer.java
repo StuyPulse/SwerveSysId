@@ -5,8 +5,8 @@
 
 package com.stuypulse.robot;
 
-import com.stuypulse.robot.commands.Dynamic;
-import com.stuypulse.robot.commands.Quasistatic;
+import com.stuypulse.robot.commands.DynamicTest;
+import com.stuypulse.robot.commands.QuasistaticTest;
 import com.stuypulse.robot.subsystems.Logger;
 import com.stuypulse.robot.subsystems.VoltageSwerve;
 import com.stuypulse.stuylib.network.SmartNumber;
@@ -52,10 +52,10 @@ public class RobotContainer {
     /**************/
 
     public void configureAutons() {
-        autonChooser.setDefaultOption("Quasistatic Forward", new Quasistatic(this, rampRate));
-        autonChooser.addOption("Quasistatic Backward", new Quasistatic(this, -rampRate));
-        autonChooser.addOption("Dynamic Forward", new Dynamic(this, dynamic));
-        autonChooser.addOption("Dynamic Backward", new Dynamic(this, -dynamic));
+        autonChooser.setDefaultOption("Quasistatic Forward", new QuasistaticTest(this, rampRate).forward());
+        autonChooser.addOption("Quasistatic Backward", new QuasistaticTest(this, rampRate).reverse());
+        autonChooser.addOption("Dynamic Forward", new DynamicTest(this, dynamic).forward());
+        autonChooser.addOption("Dynamic Backward", new DynamicTest(this, dynamic).reverse());
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }

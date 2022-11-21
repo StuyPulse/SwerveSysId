@@ -1,28 +1,50 @@
 package com.stuypulse.robot.commands;
 
 import com.stuypulse.robot.RobotContainer;
+import com.stuypulse.robot.constants.Settings;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class Dynamic extends CommandBase {
-
+public class QuasistaticTest extends CommandBase {
+	
 	private final RobotContainer robot;
-	private final double volts;
 
-	public Dynamic(RobotContainer robot, double volts) {
+	private Number rampRate;
+
+	private double volts;
+
+	private boolean forward;
+
+	public QuasistaticTest(RobotContainer robot, Number rampRate) {
 		this.robot = robot;
-		this.volts = volts;
+		this.rampRate = rampRate;
+
+		forward();
+	}
+
+	public QuasistaticTest forward() {
+		forward = true;
+		return this;
+	}
+
+	public QuasistaticTest reverse() {
+		forward = false;
+		return this;
 	}
 
 	@Override
 	public void initialize() {
 		robot.logger.clear();
+
+		volts = 0;
 	}
 
 	@Override
 	public void execute() {
 		robot.swerve.setLeftVoltage(volts);
 		robot.swerve.setRightVoltage(volts);
+
+		volts += rampRate.doubleValue() * Settings.dT;
 	}
 
 	@Override
@@ -35,7 +57,7 @@ public class Dynamic extends CommandBase {
 		robot.swerve.setLeftVoltage(0.0);
 		robot.swerve.setRightVoltage(0.0);
 
-		robot.logger.publish("fast", volts > 0);
+		robot.logger.publish("slow", forward);
 	}
-
+	
 }
