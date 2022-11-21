@@ -8,20 +8,21 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class Quasistatic extends CommandBase {
 	
 	private final RobotContainer robot;
-	private final double voltDelta;
+
+	private Number rampRate;
 
 	private double volts;
 
-	public Quasistatic(RobotContainer robot, double rampRate) {
+	public Quasistatic(RobotContainer robot, Number rampRate) {
 		this.robot = robot;
-		voltDelta = rampRate * Settings.dT;
-
-		volts = 0;
+		this.rampRate = rampRate;
 	}
 
 	@Override
 	public void initialize() {
 		robot.logger.clear();
+
+		volts = 0;
 	}
 
 	@Override
@@ -29,7 +30,7 @@ public class Quasistatic extends CommandBase {
 		robot.swerve.setLeftVoltage(volts);
 		robot.swerve.setRightVoltage(volts);
 
-		volts += voltDelta;
+		volts += rampRate.doubleValue() * Settings.dT;
 	}
 
 	@Override
@@ -42,7 +43,7 @@ public class Quasistatic extends CommandBase {
 		robot.swerve.setLeftVoltage(0.0);
 		robot.swerve.setRightVoltage(0.0);
 
-		robot.logger.publish("slow", voltDelta > 0);
+		robot.logger.publish("slow", rampRate.doubleValue() > 0);
 	}
 	
 }

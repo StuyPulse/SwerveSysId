@@ -52,10 +52,10 @@ public class RobotContainer {
     /**************/
 
     public void configureAutons() {
-        autonChooser.setDefaultOption("Quasistatic Forward", new Quasistatic(this, +rampRate.doubleValue()));
-        autonChooser.addOption("Quasistatic Backward", new Quasistatic(this, -rampRate.doubleValue()));
-        autonChooser.addOption("Dynamic Forward", new Dynamic(this, +dynamic.doubleValue()));
-        autonChooser.addOption("Dynamic Backward", new Dynamic(this, -dynamic.doubleValue()));
+        autonChooser.setDefaultOption("Quasistatic Forward", new Quasistatic(this, rampRate));
+        autonChooser.addOption("Quasistatic Backward", new Quasistatic(this, -rampRate));
+        autonChooser.addOption("Dynamic Forward", new Dynamic(this, dynamic));
+        autonChooser.addOption("Dynamic Backward", new Dynamic(this, -dynamic));
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }

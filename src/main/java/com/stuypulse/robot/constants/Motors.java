@@ -32,8 +32,8 @@ public interface Motors {
 	public interface Modules {
 		public interface FrontRight {
 			String ID = "Front Right";
-			int DRIVE_PORT = 3;
-			int TURN_PORT = 4;
+			int DRIVE_PORT = 10;
+			int TURN_PORT = 11;
 			int ENCODER_PORT = 1;
 			SmartAngle ABSOLUTE_OFFSET = new SmartAngle(ID + "/Absolute Offset", Angle.fromDegrees(143));
 			Translation2d MODULE_OFFSET = new Translation2d(Chassis.WIDTH * +0.5, Chassis.HEIGHT * -0.5);
@@ -41,8 +41,8 @@ public interface Motors {
 	
 		public interface FrontLeft {
 			String ID = "Front Left";
-			int DRIVE_PORT = 1;
-			int TURN_PORT = 2;
+			int DRIVE_PORT = 12;
+			int TURN_PORT = 13;
 			int ENCODER_PORT = 3;
 			SmartAngle ABSOLUTE_OFFSET = new SmartAngle(ID + "/Absolute Offset", Angle.fromDegrees(36));
 			Translation2d MODULE_OFFSET = new Translation2d(Chassis.WIDTH * +0.5, Chassis.HEIGHT * +0.5);
@@ -50,8 +50,8 @@ public interface Motors {
 	
 		public interface BackLeft {
 			String ID = "Back Left";
-			int DRIVE_PORT = 5;
-			int TURN_PORT = 6;
+			int DRIVE_PORT = 14;
+			int TURN_PORT = 15;
 			int ENCODER_PORT = 2;
 			SmartAngle ABSOLUTE_OFFSET = new SmartAngle(ID + "/Absolute Offset", Angle.fromDegrees(-80.5));
 			Translation2d MODULE_OFFSET = new Translation2d(Chassis.WIDTH * -0.5, Chassis.HEIGHT * +0.5);
@@ -59,8 +59,8 @@ public interface Motors {
 	
 		public interface BackRight {
 			String ID = "Back Right";
-			int DRIVE_PORT = 7;
-			int TURN_PORT = 8;
+			int DRIVE_PORT = 16;
+			int TURN_PORT = 17;
 			int ENCODER_PORT = 0;
 			SmartAngle ABSOLUTE_OFFSET = new SmartAngle(ID + "/Absolute Offset", Angle.fromDegrees(142.3));
 			Translation2d MODULE_OFFSET = new Translation2d(Chassis.WIDTH * -0.5, Chassis.HEIGHT * -0.5);
@@ -68,8 +68,8 @@ public interface Motors {
 	
 		public static SwerveModule makeModule(String id, int turnId, int driveId, int encoderPort,
 				SmartAngle absoluteOffset, Translation2d moduleOffset) {
-			// return new VoltageSwerveModule(id, moduleOffset, turnId, encoderPort, absoluteOffset, driveId);
-			return new SimVoltageSwerveModule(id, moduleOffset);
+			return new VoltageSwerveModule(id, moduleOffset, turnId, encoderPort, absoluteOffset, driveId);
+			// return new SimVoltageSwerveModule(id, moduleOffset);
 		}
 	}
 }
