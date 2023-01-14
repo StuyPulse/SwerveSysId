@@ -16,6 +16,7 @@ import com.stuypulse.stuylib.network.SmartNumber;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -94,6 +95,11 @@ public class VoltageSwerveModule extends SubsystemBase implements SwerveModule {
     @Override
     public SwerveModuleState getState() {
         return new SwerveModuleState(getVelocity() * Settings.Encoder.Drive.WHEEL_CIRCUMFERENCE, getRotation2d());
+    }
+
+    @Override
+    public SwerveModulePosition getPosition() {
+        return new SwerveModulePosition(driveEncoder.getPosition(), getRotation2d());
     }
 
     private Rotation2d getAbsolutePosition() {

@@ -69,7 +69,7 @@ public class VoltageSwerve extends SubsystemBase {
 	}
 
 	private SwerveModulePosition[] getModulePositions() {
-		return Arrays.stream(modules).map(x -> x.getState()).toArray(SwerveModulePosition[]::new);
+		return Arrays.stream(modules).map(x -> x.getPosition()).toArray(SwerveModulePosition[]::new);
 	}
 
 	public void setLeftVoltage(double voltage) {
