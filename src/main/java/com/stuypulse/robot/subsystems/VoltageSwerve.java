@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.SPI;
@@ -51,7 +52,7 @@ public class VoltageSwerve extends SubsystemBase {
 		gyro = new AHRS(SPI.Port.kMXP);
 
 		kinematics = new SwerveDriveKinematics(getModuleLocations());
-		odometry = new SwerveDriveOdometry(kinematics, getRotation2d());
+		odometry = new SwerveDriveOdometry(kinematics, getRotation2d(), getModulePositions());
 
 		angleFilter = new AngleVelocity();
 
@@ -65,6 +66,10 @@ public class VoltageSwerve extends SubsystemBase {
 
 	private SwerveModuleState[] getModuleStates() {
 		return Arrays.stream(modules).map(x -> x.getState()).toArray(SwerveModuleState[]::new);
+	}
+
+	private SwerveModulePosition[] getModulePositions() {
+		return Arrays.stream(modules).map(x -> x.getState()).toArray(SwerveModulePosition[]::new);
 	}
 
 	public void setLeftVoltage(double voltage) {
@@ -116,7 +121,7 @@ public class VoltageSwerve extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		odometry.update(getRotation2d(), getModuleStates());
+		odometry.update(getRotation2d(), getModulePositions());
 
 		modules[0].setVoltage(rightVoltage);
 		modules[1].setVoltage(leftVoltage);
