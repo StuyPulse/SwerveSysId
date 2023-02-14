@@ -1,5 +1,6 @@
 {
     "outputFile": "data.json",
-    "ip": "10.6.94.2",
-    "wheelDiameter": 0.1016
+    "ipee": "10.6.94.2",
+    "ip": "127.0.0.1",
+    "wheelDiameter": 0.0762
 }

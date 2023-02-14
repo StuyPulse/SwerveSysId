@@ -27,13 +27,13 @@ public class VoltageSwerve extends SubsystemBase {
 	// Subsystems
 	private final SwerveModule[] modules = new SwerveModule[] {
 		makeModule(FrontRight.ID, FrontRight.TURN_PORT, FrontRight.DRIVE_PORT,
-				FrontRight.ENCODER_PORT, FrontRight.ABSOLUTE_OFFSET, FrontRight.MODULE_OFFSET),
+				FrontRight.ABSOLUTE_OFFSET, FrontRight.MODULE_OFFSET),
 		makeModule(FrontLeft.ID, FrontLeft.TURN_PORT, FrontLeft.DRIVE_PORT,
-				FrontLeft.ENCODER_PORT, FrontLeft.ABSOLUTE_OFFSET, FrontLeft.MODULE_OFFSET),
+				FrontLeft.ABSOLUTE_OFFSET, FrontLeft.MODULE_OFFSET),
 		makeModule(BackLeft.ID, BackLeft.TURN_PORT, BackLeft.DRIVE_PORT,
-				BackLeft.ENCODER_PORT, BackLeft.ABSOLUTE_OFFSET, BackLeft.MODULE_OFFSET),
+				BackLeft.ABSOLUTE_OFFSET, BackLeft.MODULE_OFFSET),
 		makeModule(BackRight.ID, BackRight.TURN_PORT, BackRight.DRIVE_PORT,
-				BackRight.ENCODER_PORT, BackRight.ABSOLUTE_OFFSET, BackRight.MODULE_OFFSET)
+				BackRight.ABSOLUTE_OFFSET, BackRight.MODULE_OFFSET)
 	};
 
 	private final SwerveDriveKinematics kinematics;
