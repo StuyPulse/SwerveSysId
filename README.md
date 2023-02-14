@@ -1,8 +1,10 @@
 # SwerveSysId
 
-## Goals
-- Use hardcoded constants to collect data as starting point
-- Read config json from sysid as a more general solution
+## Running
+
+1. Run 4 autonomous commands and disable each after accumulating enough data
+2. Run client/client.py (give correct ip in config)
+3. Input data.json into SysID
 
 ## Links
 - [SysId Data Collection SmartDasboard Interface](https://github.com/wpilibsuite/sysid/blob/main/docs/data-collection.md)
