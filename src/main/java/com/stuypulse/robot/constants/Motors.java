@@ -6,6 +6,7 @@
 package com.stuypulse.robot.constants;
 
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Settings.Chassis;
 import com.stuypulse.robot.subsystems.SwerveModule;
 import com.stuypulse.robot.subsystems.module.SimVoltageSwerveModule;
@@ -14,6 +15,7 @@ import com.stuypulse.robot.util.SparkMaxConfig;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.network.SmartAngle;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
 /*-
@@ -26,16 +28,15 @@ import edu.wpi.first.math.geometry.Translation2d;
  *  - The Open Loop Ramp Rate
  */
 public interface Motors {
-	SparkMaxConfig TURN_CONFIG = new SparkMaxConfig(false, IdleMode.kBrake, 60, 0.0);
-	SparkMaxConfig DRIVE_CONFIG = new SparkMaxConfig(false, IdleMode.kBrake, 60, 0.0);
+	SparkMaxConfig DRIVE = new SparkMaxConfig(false, IdleMode.kBrake, 40, 0);
+	SparkMaxConfig TURN  = new SparkMaxConfig(false, IdleMode.kBrake, 20, 0);
 
 	public interface Modules {
 		public interface FrontRight {
 			String ID = "Front Right";
 			int DRIVE_PORT = 10;
 			int TURN_PORT = 11;
-			int ENCODER_PORT = 1;
-			SmartAngle ABSOLUTE_OFFSET = new SmartAngle(ID + "/Absolute Offset", Angle.fromDegrees(143));
+			Rotation2d ABSOLUTE_OFFSET = Rotation2d.fromDegrees(0);
 			Translation2d MODULE_OFFSET = new Translation2d(Chassis.WIDTH * +0.5, Chassis.HEIGHT * -0.5);
 		}
 	
@@ -43,8 +44,7 @@ public interface Motors {
 			String ID = "Front Left";
 			int DRIVE_PORT = 12;
 			int TURN_PORT = 13;
-			int ENCODER_PORT = 3;
-			SmartAngle ABSOLUTE_OFFSET = new SmartAngle(ID + "/Absolute Offset", Angle.fromDegrees(36));
+			Rotation2d ABSOLUTE_OFFSET = Rotation2d.fromDegrees(0);
 			Translation2d MODULE_OFFSET = new Translation2d(Chassis.WIDTH * +0.5, Chassis.HEIGHT * +0.5);
 		}
 	
@@ -52,8 +52,7 @@ public interface Motors {
 			String ID = "Back Left";
 			int DRIVE_PORT = 14;
 			int TURN_PORT = 15;
-			int ENCODER_PORT = 2;
-			SmartAngle ABSOLUTE_OFFSET = new SmartAngle(ID + "/Absolute Offset", Angle.fromDegrees(-80.5));
+			Rotation2d ABSOLUTE_OFFSET = Rotation2d.fromDegrees(0);
 			Translation2d MODULE_OFFSET = new Translation2d(Chassis.WIDTH * -0.5, Chassis.HEIGHT * +0.5);
 		}
 	
@@ -61,15 +60,15 @@ public interface Motors {
 			String ID = "Back Right";
 			int DRIVE_PORT = 16;
 			int TURN_PORT = 17;
-			int ENCODER_PORT = 0;
-			SmartAngle ABSOLUTE_OFFSET = new SmartAngle(ID + "/Absolute Offset", Angle.fromDegrees(142.3));
+			Rotation2d ABSOLUTE_OFFSET = Rotation2d.fromDegrees(0);
 			Translation2d MODULE_OFFSET = new Translation2d(Chassis.WIDTH * -0.5, Chassis.HEIGHT * -0.5);
 		}
 	
-		public static SwerveModule makeModule(String id, int turnId, int driveId, int encoderPort,
-				SmartAngle absoluteOffset, Translation2d moduleOffset) {
-			return new VoltageSwerveModule(id, moduleOffset, turnId, encoderPort, absoluteOffset, driveId);
-			// return new SimVoltageSwerveModule(id, moduleOffset);
+		public static SwerveModule makeModule(String id, int turnId, int driveId,
+				Rotation2d absoluteOffset, Translation2d moduleOffset) {
+			return Robot.isReal()
+				? new VoltageSwerveModule(id, moduleOffset, turnId, absoluteOffset, driveId)
+				: new SimVoltageSwerveModule(id, moduleOffset);
 		}
 	}
 }

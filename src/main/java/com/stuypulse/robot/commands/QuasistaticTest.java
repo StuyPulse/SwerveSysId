@@ -44,7 +44,10 @@ public class QuasistaticTest extends CommandBase {
 		robot.swerve.setLeftVoltage(volts);
 		robot.swerve.setRightVoltage(volts);
 
-		volts += rampRate.doubleValue() * Settings.dT;
+		if (forward)
+			volts += rampRate.doubleValue() * Settings.dT;
+		else
+			volts -= rampRate.doubleValue() * Settings.dT;
 	}
 
 	@Override

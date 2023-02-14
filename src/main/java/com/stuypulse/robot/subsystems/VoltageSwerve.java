@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.SPI;
@@ -26,13 +27,13 @@ public class VoltageSwerve extends SubsystemBase {
 	// Subsystems
 	private final SwerveModule[] modules = new SwerveModule[] {
 		makeModule(FrontRight.ID, FrontRight.TURN_PORT, FrontRight.DRIVE_PORT,
-				FrontRight.ENCODER_PORT, FrontRight.ABSOLUTE_OFFSET, FrontRight.MODULE_OFFSET),
+				FrontRight.ABSOLUTE_OFFSET, FrontRight.MODULE_OFFSET),
 		makeModule(FrontLeft.ID, FrontLeft.TURN_PORT, FrontLeft.DRIVE_PORT,
-				FrontLeft.ENCODER_PORT, FrontLeft.ABSOLUTE_OFFSET, FrontLeft.MODULE_OFFSET),
+				FrontLeft.ABSOLUTE_OFFSET, FrontLeft.MODULE_OFFSET),
 		makeModule(BackLeft.ID, BackLeft.TURN_PORT, BackLeft.DRIVE_PORT,
-				BackLeft.ENCODER_PORT, BackLeft.ABSOLUTE_OFFSET, BackLeft.MODULE_OFFSET),
+				BackLeft.ABSOLUTE_OFFSET, BackLeft.MODULE_OFFSET),
 		makeModule(BackRight.ID, BackRight.TURN_PORT, BackRight.DRIVE_PORT,
-				BackRight.ENCODER_PORT, BackRight.ABSOLUTE_OFFSET, BackRight.MODULE_OFFSET)
+				BackRight.ABSOLUTE_OFFSET, BackRight.MODULE_OFFSET)
 	};
 
 	private final SwerveDriveKinematics kinematics;
@@ -51,7 +52,7 @@ public class VoltageSwerve extends SubsystemBase {
 		gyro = new AHRS(SPI.Port.kMXP);
 
 		kinematics = new SwerveDriveKinematics(getModuleLocations());
-		odometry = new SwerveDriveOdometry(kinematics, getRotation2d());
+		odometry = new SwerveDriveOdometry(kinematics, getRotation2d(), getModulePositions());
 
 		angleFilter = new AngleVelocity();
 
@@ -65,6 +66,10 @@ public class VoltageSwerve extends SubsystemBase {
 
 	private SwerveModuleState[] getModuleStates() {
 		return Arrays.stream(modules).map(x -> x.getState()).toArray(SwerveModuleState[]::new);
+	}
+
+	private SwerveModulePosition[] getModulePositions() {
+		return Arrays.stream(modules).map(x -> x.getPosition()).toArray(SwerveModulePosition[]::new);
 	}
 
 	public void setLeftVoltage(double voltage) {
@@ -116,7 +121,7 @@ public class VoltageSwerve extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		odometry.update(getRotation2d(), getModuleStates());
+		odometry.update(getRotation2d(), getModulePositions());
 
 		modules[0].setVoltage(rightVoltage);
 		modules[1].setVoltage(leftVoltage);
