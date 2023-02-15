@@ -100,17 +100,12 @@ public class SimVoltageSwerveModule extends SubsystemBase implements SwerveModul
 
     @Override
     public double getVelocity() {
-        return driveSim.getOutput(0) / Settings.Encoder.Drive.WHEEL_CIRCUMFERENCE;
+        return driveSim.getOutput(1) / Settings.Swerve.Encoder.Drive.WHEEL_CIRCUMFERENCE;
     }
 
     @Override
     public SwerveModuleState getState() {
-        return new SwerveModuleState(driveSim.getOutput(1), getRotation2d());
-    }
-
-    @Override
-    public SwerveModulePosition getPosition() {
-        return new SwerveModulePosition(getDistance(), getRotation2d());
+        return new SwerveModuleState(driveSim.getOutput(0), getRotation2d());
     }
 
     @Override

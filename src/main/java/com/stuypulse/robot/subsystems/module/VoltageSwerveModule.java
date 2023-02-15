@@ -7,7 +7,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.constants.Settings.Encoder;
+import com.stuypulse.robot.constants.Settings.Swerve.Encoder;
 import com.stuypulse.robot.subsystems.SwerveModule;
 import com.stuypulse.stuylib.control.angle.AngleController;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
@@ -63,11 +63,10 @@ public class VoltageSwerveModule extends SubsystemBase implements SwerveModule {
         
         // drive
         driveMotor = new CANSparkMax(driveCANId, MotorType.kBrushless);
-        driveEncoder = driveMotor.getEncoder();
+        configureDriveMotor();
     }   
 
     private void configureTurnMotor(Rotation2d angleOffset) {
-
         turnMotor.restoreFactoryDefaults();
         
         absoluteEncoder = turnMotor.getAbsoluteEncoder(Type.kDutyCycle);
@@ -79,6 +78,18 @@ public class VoltageSwerveModule extends SubsystemBase implements SwerveModule {
         turnMotor.enableVoltageCompensation(12.0);
 
         Motors.TURN.config(turnMotor);
+    }
+
+    private void configureDriveMotor() {
+        driveMotor.restoreFactoryDefaults();
+        
+        driveEncoder = driveMotor.getEncoder();
+        // driveEncoder.setPositionConversionFactor(Encoder.Drive.POSITION_CONVERSION);
+        // driveEncoder.setVelocityConversionFactor(Encoder.Drive.VELOCITY_CONVERSION);
+        
+        driveMotor.enableVoltageCompensation(12.0);
+        Motors.DRIVE.config(driveMotor);
+        driveEncoder.setPosition(0);
     }
 
     @Override
@@ -98,7 +109,7 @@ public class VoltageSwerveModule extends SubsystemBase implements SwerveModule {
 
     @Override
     public SwerveModuleState getState() {
-        return new SwerveModuleState(getVelocity() * Settings.Encoder.Drive.WHEEL_CIRCUMFERENCE, getRotation2d());
+        return new SwerveModuleState(getVelocity() * Settings.Swerve.Encoder.Drive.WHEEL_CIRCUMFERENCE, getRotation2d());
     }
 
     @Override
@@ -107,7 +118,7 @@ public class VoltageSwerveModule extends SubsystemBase implements SwerveModule {
     }
 
     private Rotation2d getAbsolutePosition() {
-        return new Rotation2d(MathUtil.interpolate(-Math.PI, +Math.PI, absoluteEncoder.getPosition()));
+        return Rotation2d.fromRotations(absoluteEncoder.getPosition());
     }
 
     private Rotation2d getRotation2d() {

@@ -1,11 +1,14 @@
 package com.stuypulse.robot.subsystems;
 
-import static com.stuypulse.robot.constants.Motors.Modules.*;
+import static com.stuypulse.robot.constants.Settings.Swerve.*;
 
 import java.util.Arrays;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.stuypulse.robot.Robot;
+import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.subsystems.module.SimVoltageSwerveModule;
 import com.stuypulse.robot.subsystems.module.VoltageSwerveModule;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.util.AngleVelocity;
@@ -23,18 +26,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class VoltageSwerve extends SubsystemBase {
-		
+
 	// Subsystems
-	private final SwerveModule[] modules = new SwerveModule[] {
-		makeModule(FrontRight.ID, FrontRight.TURN_PORT, FrontRight.DRIVE_PORT,
-				FrontRight.ABSOLUTE_OFFSET, FrontRight.MODULE_OFFSET),
-		makeModule(FrontLeft.ID, FrontLeft.TURN_PORT, FrontLeft.DRIVE_PORT,
-				FrontLeft.ABSOLUTE_OFFSET, FrontLeft.MODULE_OFFSET),
-		makeModule(BackLeft.ID, BackLeft.TURN_PORT, BackLeft.DRIVE_PORT,
-				BackLeft.ABSOLUTE_OFFSET, BackLeft.MODULE_OFFSET),
-		makeModule(BackRight.ID, BackRight.TURN_PORT, BackRight.DRIVE_PORT,
-				BackRight.ABSOLUTE_OFFSET, BackRight.MODULE_OFFSET)
-	};
+	private final SwerveModule[] modules;
 
 	private final SwerveDriveKinematics kinematics;
 	private final SwerveDriveOdometry odometry;
@@ -49,6 +43,22 @@ public class VoltageSwerve extends SubsystemBase {
 	private Field2d field;
 
 	public VoltageSwerve() {
+		if (Robot.isReal()) {
+			modules = new SwerveModule[] {
+				new VoltageSwerveModule(FrontRight.ID, FrontRight.MODULE_OFFSET, Ports.Swerve.FrontRight.TURN, FrontRight.ABSOLUTE_OFFSET, Ports.Swerve.FrontRight.DRIVE),
+				new VoltageSwerveModule(FrontLeft.ID, FrontLeft.MODULE_OFFSET, Ports.Swerve.FrontLeft.TURN, FrontLeft.ABSOLUTE_OFFSET, Ports.Swerve.FrontLeft.DRIVE),
+				new VoltageSwerveModule(BackLeft.ID, BackLeft.MODULE_OFFSET, Ports.Swerve.BackLeft.TURN, BackLeft.ABSOLUTE_OFFSET, Ports.Swerve.BackLeft.DRIVE),
+				new VoltageSwerveModule(BackRight.ID, BackRight.MODULE_OFFSET, Ports.Swerve.BackRight.TURN, BackRight.ABSOLUTE_OFFSET, Ports.Swerve.BackRight.DRIVE)
+			};
+		} else {
+			modules = new SwerveModule[] {
+				new SimVoltageSwerveModule(FrontRight.ID, FrontRight.MODULE_OFFSET),
+				new SimVoltageSwerveModule(FrontLeft.ID, FrontLeft.MODULE_OFFSET),
+				new SimVoltageSwerveModule(BackLeft.ID, BackLeft.MODULE_OFFSET),
+				new SimVoltageSwerveModule(BackRight.ID, BackRight.MODULE_OFFSET)
+			};
+		}
+
 		gyro = new AHRS(SPI.Port.kMXP);
 
 		kinematics = new SwerveDriveKinematics(getModuleLocations());
