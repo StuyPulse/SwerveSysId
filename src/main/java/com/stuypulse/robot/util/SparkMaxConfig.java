@@ -25,10 +25,10 @@ public final class SparkMaxConfig {
         motor.setSmartCurrentLimit(smartCurrentLimit);
         motor.setOpenLoopRampRate(openLoopRampRate);
 
-        motor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500 / Settings.UPDATE_RATE);
-        motor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 1000 / Settings.UPDATE_RATE);
-        motor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 1000 / Settings.UPDATE_RATE);
-        motor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 2500 / Settings.UPDATE_RATE);
+        // motor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500 / Settings.UPDATE_RATE);
+        // motor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 1000 / Settings.UPDATE_RATE);
+        // motor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 1000 / Settings.UPDATE_RATE);
+        // motor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 2500 / Settings.UPDATE_RATE);
 
         motor.burnFlash();
     }
