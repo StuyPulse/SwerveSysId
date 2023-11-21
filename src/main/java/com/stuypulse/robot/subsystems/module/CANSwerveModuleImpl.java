@@ -1,27 +1,23 @@
 package com.stuypulse.robot.subsystems.module;
 
+import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.constants.Settings.Swerve.Encoder;
 import com.stuypulse.robot.subsystems.SwerveModule;
 import com.stuypulse.stuylib.control.angle.AngleController;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.math.Angle;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class VoltageSwerveModule extends SubsystemBase implements SwerveModule {
+public class CANSwerveModuleImpl extends SwerveModule {
 
     private interface Turn {
         double kP = 3.5;
@@ -36,7 +32,7 @@ public class VoltageSwerveModule extends SubsystemBase implements SwerveModule {
 
     // turn
     private CANSparkMax turnMotor;
-    private SparkMaxAbsoluteEncoder absoluteEncoder;
+    private CANCoder absoluteEncoder;
 
     // drive
     private CANSparkMax driveMotor;
@@ -47,8 +43,7 @@ public class VoltageSwerveModule extends SubsystemBase implements SwerveModule {
 
     private double voltage;
 
-    public VoltageSwerveModule(String id, Translation2d location, int turnCANId,
-            Rotation2d angleOffset, int driveCANId) {
+    public CANSwerveModuleImpl(String id, Translation2d location, int turnCANId, Rotation2d angleOffset, int driveCANId, int turnEncoderId) {
 
         // module data
         this.id = id;
@@ -58,7 +53,7 @@ public class VoltageSwerveModule extends SubsystemBase implements SwerveModule {
         // turn 
         turnMotor = new CANSparkMax(turnCANId, MotorType.kBrushless);
         turnPID = new AnglePIDController(Turn.kP, Turn.kI, Turn.kD);
-        absoluteEncoder = turnMotor.getAbsoluteEncoder(Type.kDutyCycle);
+        absoluteEncoder = new CANCoder(turnEncoderId);
         configureTurnMotor(angleOffset);
         
         // drive
@@ -68,12 +63,6 @@ public class VoltageSwerveModule extends SubsystemBase implements SwerveModule {
 
     private void configureTurnMotor(Rotation2d angleOffset) {
         turnMotor.restoreFactoryDefaults();
-        
-        absoluteEncoder = turnMotor.getAbsoluteEncoder(Type.kDutyCycle);
-        absoluteEncoder.setPositionConversionFactor(Encoder.Turn.POSITION_CONVERSION);
-        absoluteEncoder.setVelocityConversionFactor(Encoder.Turn.VELOCITY_CONVERSION);
-        absoluteEncoder.setZeroOffset(angleOffset.getRotations());
-        absoluteEncoder.setInverted(true);
 
         turnMotor.enableVoltageCompensation(12.0);
 
@@ -90,11 +79,6 @@ public class VoltageSwerveModule extends SubsystemBase implements SwerveModule {
         driveMotor.enableVoltageCompensation(12.0);
         Motors.DRIVE.config(driveMotor);
         driveEncoder.setPosition(0);
-    }
-
-    @Override
-    public String getId() {
-        return id;
     }
 
     @Override
@@ -118,7 +102,7 @@ public class VoltageSwerveModule extends SubsystemBase implements SwerveModule {
     }
 
     private Rotation2d getAbsolutePosition() {
-        return Rotation2d.fromRotations(absoluteEncoder.getPosition());
+        return Rotation2d.fromDegrees(absoluteEncoder.getAbsolutePosition());
     }
 
     private Rotation2d getRotation2d() {

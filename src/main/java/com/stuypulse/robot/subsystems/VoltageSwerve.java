@@ -8,8 +8,8 @@ import com.kauailabs.navx.frc.AHRS;
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.subsystems.module.SimVoltageSwerveModule;
-import com.stuypulse.robot.subsystems.module.VoltageSwerveModule;
+import com.stuypulse.robot.subsystems.module.SwerveModuleSim;
+import com.stuypulse.robot.subsystems.module.MaxSwerveModuleImpl;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.util.AngleVelocity;
 
@@ -45,17 +45,17 @@ public class VoltageSwerve extends SubsystemBase {
 	public VoltageSwerve() {
 		if (Robot.isReal()) {
 			modules = new SwerveModule[] {
-				new VoltageSwerveModule(FrontRight.ID, FrontRight.MODULE_OFFSET, Ports.Swerve.FrontRight.TURN, FrontRight.ABSOLUTE_OFFSET, Ports.Swerve.FrontRight.DRIVE),
-				new VoltageSwerveModule(FrontLeft.ID, FrontLeft.MODULE_OFFSET, Ports.Swerve.FrontLeft.TURN, FrontLeft.ABSOLUTE_OFFSET, Ports.Swerve.FrontLeft.DRIVE),
-				new VoltageSwerveModule(BackLeft.ID, BackLeft.MODULE_OFFSET, Ports.Swerve.BackLeft.TURN, BackLeft.ABSOLUTE_OFFSET, Ports.Swerve.BackLeft.DRIVE),
-				new VoltageSwerveModule(BackRight.ID, BackRight.MODULE_OFFSET, Ports.Swerve.BackRight.TURN, BackRight.ABSOLUTE_OFFSET, Ports.Swerve.BackRight.DRIVE)
+				new MaxSwerveModuleImpl(FrontRight.ID, FrontRight.MODULE_OFFSET, Ports.Swerve.FrontRight.TURN, FrontRight.ABSOLUTE_OFFSET, Ports.Swerve.FrontRight.DRIVE),
+				new MaxSwerveModuleImpl(FrontLeft.ID, FrontLeft.MODULE_OFFSET, Ports.Swerve.FrontLeft.TURN, FrontLeft.ABSOLUTE_OFFSET, Ports.Swerve.FrontLeft.DRIVE),
+				new MaxSwerveModuleImpl(BackLeft.ID, BackLeft.MODULE_OFFSET, Ports.Swerve.BackLeft.TURN, BackLeft.ABSOLUTE_OFFSET, Ports.Swerve.BackLeft.DRIVE),
+				new MaxSwerveModuleImpl(BackRight.ID, BackRight.MODULE_OFFSET, Ports.Swerve.BackRight.TURN, BackRight.ABSOLUTE_OFFSET, Ports.Swerve.BackRight.DRIVE)
 			};
 		} else {
 			modules = new SwerveModule[] {
-				new SimVoltageSwerveModule(FrontRight.ID, FrontRight.MODULE_OFFSET),
-				new SimVoltageSwerveModule(FrontLeft.ID, FrontLeft.MODULE_OFFSET),
-				new SimVoltageSwerveModule(BackLeft.ID, BackLeft.MODULE_OFFSET),
-				new SimVoltageSwerveModule(BackRight.ID, BackRight.MODULE_OFFSET)
+				new SwerveModuleSim(FrontRight.ID, FrontRight.MODULE_OFFSET),
+				new SwerveModuleSim(FrontLeft.ID, FrontLeft.MODULE_OFFSET),
+				new SwerveModuleSim(BackLeft.ID, BackLeft.MODULE_OFFSET),
+				new SwerveModuleSim(BackRight.ID, BackRight.MODULE_OFFSET)
 			};
 		}
 

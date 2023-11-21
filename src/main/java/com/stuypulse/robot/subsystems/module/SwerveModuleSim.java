@@ -19,9 +19,8 @@ import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.LinearSystemSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class SimVoltageSwerveModule extends SubsystemBase implements SwerveModule {
+public class SwerveModuleSim extends SwerveModule {
 
     private static LinearSystem<N2, N1, N2> identifyVelocityPositionSystem(double kV, double kA) {
         if (kV <= 0.0) {
@@ -70,7 +69,7 @@ public class SimVoltageSwerveModule extends SubsystemBase implements SwerveModul
 
     private double voltage;
 
-    public SimVoltageSwerveModule(String id, Translation2d location) {
+    public SwerveModuleSim(String id, Translation2d location) {
         // module data
         this.id = id;
         this.location = location;
@@ -86,11 +85,6 @@ public class SimVoltageSwerveModule extends SubsystemBase implements SwerveModul
         voltage = 0.0;
 
 		driveSim = new LinearSystemSim<>(identifyVelocityPositionSystem(Drive.kV, Drive.kA));
-    }
-
-    @Override
-    public String getId() {
-        return id;
     }
 
     @Override
